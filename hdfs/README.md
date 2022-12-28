@@ -63,7 +63,7 @@ source ~/.bashrc
 ### Hadoop Configuration
 * **hadoop-env.sh**<br>
 ```bash
-vi ~/hadoop/etc/hadoop/hadoop-env.sh<br>
+vi ~/hadoop/etc/hadoop/hadoop-env.sh
 ```
 ```bash
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -160,6 +160,6 @@ vi ~/hadoop/etc/hadoop/workers
 ## Format και εκκίνηση HDFS
 **Master**<br>
 ```bash
-hdfs namenode -format<br>
+hdfs namenode -format
 start-dfs.sh
 ```
