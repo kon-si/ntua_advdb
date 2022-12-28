@@ -43,11 +43,11 @@ export YARN_HOME=${HADOOP_HOME}
 source ~/.bashrc (επαναφόρτωση των μεταβλητών στο bash session)
 
 ### Hadoop Configuration
-* **hadoop-env.sh**
+* **hadoop-env.sh**<br>
 vi ~/hadoop/etc/hadoop/hadoop-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-* **core-site.xml**
+* **core-site.xml**<br>
 vi ~/hadoop/etc/hadoop/core-site.xml
 	<configuration>
     <property>
@@ -56,4 +56,67 @@ vi ~/hadoop/etc/hadoop/core-site.xml
     </property>
 </configuration>
 
-* 
+* **hdfs-site.xml**<br>
+vi ~/hadoop/etc/hadoop/hdfs-site.xml
+	<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:///usr/local/hadoop/hdfs/data</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:///usr/local/hadoop/hdfs/data</value>
+    </property>
+</configuration>
+
+* **yarn-site.xml**<br>
+vi ~/hadoop/etc/hadoop/yarn-site.xml
+	<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+    <property>
+       <name>yarn.resourcemanager.hostname</name>
+       <value>192.168.0.1</value>
+    </property>
+</configuration>
+
+* **mapred-site.xml**<br>
+vi ~/hadoop/etc/hadoop/mapred-site.xml
+	<configuration>
+    <property>
+        <name>mapreduce.jobtracker.address</name>
+        <value>192.168.0.1:54311</value>
+    </property>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+</configuration>
+
+### Create Data Folder
+sudo mkdir -p /usr/local/hadoop/hdfs/data
+sudo chown user:user -R /usr/local/hadoop/hdfs/data
+chmod 700 /usr/local/hadoop/hdfs/data
+
+### Αρχεία Master και Workers
+**Master and Slave:**<br>
+vi ~/hadoop/etc/hadoop/masters
+192.168.0.1
+vi ~/hadoop/etc/hadoop/workers
+192.168.0.1
+192.168.0.2
+
+## Format και εκκίνηση HDFS
+**Master**<br>
+hdfs namenode -format
+start-dfs.sh
