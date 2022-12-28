@@ -110,13 +110,13 @@ chmod 700 /usr/local/hadoop/hdfs/data
 
 ### Αρχεία Master και Workers
 **Master and Slave:**<br>
-vi ~/hadoop/etc/hadoop/masters
-192.168.0.1
-vi ~/hadoop/etc/hadoop/workers
-192.168.0.1
-192.168.0.2
+vi ~/hadoop/etc/hadoop/masters<br>
+192.168.0.1<br>
+vi ~/hadoop/etc/hadoop/workers<br>
+192.168.0.1<br>
+192.168.0.2<br>
 
 ## Format και εκκίνηση HDFS
 **Master**<br>
-hdfs namenode -format
+hdfs namenode -format<br>
 start-dfs.sh
