@@ -34,13 +34,18 @@ sudo apt-get -y install openjdk-8-jdk-headless
 ```
 ## Εγκατάσταση Hadoop
 **Master and Slave:**<br>
+```bash
 wget http://apache.cs.utah.edu/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz
 tar -xzf hadoop-3.3.4.tar.gz 
 mv hadoop-3.3.4 hadoop
-
+```
 ### Hadoop Environmental Variables
 **Master and Slave:**<br>
-vi ~/.bashrc (τα προσθέτουμε στο τέλος του αρχείου)<br>
+```bash
+vi ~/.bashrc 
+```
+(τα προσθέτουμε στο τέλος του αρχείου)<br>
+```bash
 export HADOOP_HOME=/home/ubuntu/hadoop<br>
 export PATH=$PATH:$HADOOP_HOME/bin<br>
 export PATH=$PATH:$HADOOP_HOME/sbin<br>
@@ -49,7 +54,7 @@ export HADOOP_COMMON_HOME=${HADOOP_HOME}<br>
 export HADOOP_HDFS_HOME=${HADOOP_HOME}<br>
 export YARN_HOME=${HADOOP_HOME}<br>
 source ~/.bashrc (επαναφόρτωση των μεταβλητών στο bash session)<br>
-
+```
 ### Hadoop Configuration
 * **hadoop-env.sh**<br>
 vi ~/hadoop/etc/hadoop/hadoop-env.sh<br>
