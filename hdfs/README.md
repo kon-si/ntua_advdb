@@ -53,22 +53,28 @@ export HADOOP_MAPRED_HOME=${HADOOP_HOME}<br>
 export HADOOP_COMMON_HOME=${HADOOP_HOME}<br>
 export HADOOP_HDFS_HOME=${HADOOP_HOME}<br>
 export YARN_HOME=${HADOOP_HOME}<br>
-source ~/.bashrc (επαναφόρτωση των μεταβλητών στο bash session)<br>
+source ~/.bashrc *(επαναφόρτωση των μεταβλητών στο bash session)*
 ```
 ### Hadoop Configuration
 * **hadoop-env.sh**<br>
+* ```bash
 vi ~/hadoop/etc/hadoop/hadoop-env.sh<br>
+```
+```bash
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
+```
 * **core-site.xml**<br>
-vi ~/hadoop/etc/hadoop/core-site.xml<br>
+```bash
+vi ~/hadoop/etc/hadoop/core-site.xml
+```
+```bash
 	<configuration><br>
     <property><br>
         <name>fs.defaultFS</name><br>
         <value>hdfs://192.168.0.1:9000</value><br>
     </property><br>
 </configuration><br>
-
+```
 * **hdfs-site.xml**<br>
 vi ~/hadoop/etc/hadoop/hdfs-site.xml
 	<configuration>
