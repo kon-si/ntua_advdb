@@ -46,7 +46,7 @@ vi ~/.bashrc
 ```
 (τα προσθέτουμε στο τέλος του αρχείου)<br>
 ```bash
-export HADOOP_HOME=/home/ubuntu/hadoop
+export HADOOP_HOME=/home/user/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin
 export PATH=$PATH:$HADOOP_HOME/sbin
 export HADOOP_MAPRED_HOME=${HADOOP_HOME}
