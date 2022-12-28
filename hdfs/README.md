@@ -54,13 +54,13 @@ export HADOOP_COMMON_HOME=${HADOOP_HOME}
 export HADOOP_HDFS_HOME=${HADOOP_HOME}
 export YARN_HOME=${HADOOP_HOME}
 ```
-*(επαναφόρτωση των μεταβλητών στο bash session)*
+επαναφόρτωση των μεταβλητών στο bash session:
 ```bash
 source ~/.bashrc 
 ```
 ### Hadoop Configuration
 * **hadoop-env.sh**<br>
-* ```bash
+```bash
 vi ~/hadoop/etc/hadoop/hadoop-env.sh<br>
 ```
 ```bash
@@ -71,16 +71,19 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 vi ~/hadoop/etc/hadoop/core-site.xml
 ```
 ```bash
-	<configuration><br>
-    <property><br>
-        <name>fs.defaultFS</name><br>
-        <value>hdfs://192.168.0.1:9000</value><br>
-    </property><br>
-</configuration><br>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://192.168.0.1:9000</value>
+    </property>
+</configuration>
 ```
 * **hdfs-site.xml**<br>
+```bash
 vi ~/hadoop/etc/hadoop/hdfs-site.xml
-	<configuration>
+```
+```bash
+<configuration>
     <property>
         <name>dfs.replication</name>
         <value>1</value>
@@ -94,10 +97,13 @@ vi ~/hadoop/etc/hadoop/hdfs-site.xml
         <value>file:///usr/local/hadoop/hdfs/data</value>
     </property>
 </configuration>
-
+```
 * **yarn-site.xml**<br>
+```bash
 vi ~/hadoop/etc/hadoop/yarn-site.xml
-	<configuration>
+```
+```bash
+<configuration>
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
@@ -111,10 +117,13 @@ vi ~/hadoop/etc/hadoop/yarn-site.xml
        <value>192.168.0.1</value>
     </property>
 </configuration>
-
+```
 * **mapred-site.xml**<br>
+```bash
 vi ~/hadoop/etc/hadoop/mapred-site.xml
-	<configuration>
+```
+```bash
+<configuration>
     <property>
         <name>mapreduce.jobtracker.address</name>
         <value>192.168.0.1:54311</value>
@@ -124,21 +133,31 @@ vi ~/hadoop/etc/hadoop/mapred-site.xml
         <value>yarn</value>
     </property>
 </configuration>
-
+```
 ### Create Data Folder
+```bash
 sudo mkdir -p /usr/local/hadoop/hdfs/data
 sudo chown user:user -R /usr/local/hadoop/hdfs/data
 chmod 700 /usr/local/hadoop/hdfs/data
-
+```
 ### Αρχεία Master και Workers
 **Master and Slave:**<br>
-vi ~/hadoop/etc/hadoop/masters<br>
-192.168.0.1<br>
-vi ~/hadoop/etc/hadoop/workers<br>
-192.168.0.1<br>
-192.168.0.2<br>
-
+```bash
+vi ~/hadoop/etc/hadoop/masters
+```
+```bash
+192.168.0.1
+```
+```bash
+vi ~/hadoop/etc/hadoop/workers
+```
+```bash
+192.168.0.1
+192.168.0.2
+```
 ## Format και εκκίνηση HDFS
 **Master**<br>
+```bash
 hdfs namenode -format<br>
 start-dfs.sh
+```
