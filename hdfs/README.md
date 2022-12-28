@@ -46,14 +46,17 @@ vi ~/.bashrc
 ```
 (τα προσθέτουμε στο τέλος του αρχείου)<br>
 ```bash
-export HADOOP_HOME=/home/ubuntu/hadoop<br>
-export PATH=$PATH:$HADOOP_HOME/bin<br>
-export PATH=$PATH:$HADOOP_HOME/sbin<br>
-export HADOOP_MAPRED_HOME=${HADOOP_HOME}<br>
-export HADOOP_COMMON_HOME=${HADOOP_HOME}<br>
-export HADOOP_HDFS_HOME=${HADOOP_HOME}<br>
-export YARN_HOME=${HADOOP_HOME}<br>
-source ~/.bashrc *(επαναφόρτωση των μεταβλητών στο bash session)*
+export HADOOP_HOME=/home/ubuntu/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=${HADOOP_HOME}
+export HADOOP_COMMON_HOME=${HADOOP_HOME}
+export HADOOP_HDFS_HOME=${HADOOP_HOME}
+export YARN_HOME=${HADOOP_HOME}
+```
+*(επαναφόρτωση των μεταβλητών στο bash session)*
+```bash
+source ~/.bashrc 
 ```
 ### Hadoop Configuration
 * **hadoop-env.sh**<br>
