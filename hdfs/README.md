@@ -1,6 +1,5 @@
 # install hdfs
-link:<br>
-https://sparkbyexamples.com/hadoop/apache-hadoop-installation/ 
+[source link](https://sparkbyexamples.com/hadoop/apache-hadoop-installation/)
 
 **/etc/hosts**<br>
 Προσθέτουμε στο /etc/hosts τις IPv4 που έχουν στο localnet ο master και ο slave (διαφορετικά δεν μπορεί να κάνει resolve το host name)
