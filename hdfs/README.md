@@ -2,9 +2,13 @@
 
 **/etc/hosts**<br>
 Προσθέτουμε στο /etc/hosts τις IPv4 που έχουν στο localnet ο master και ο slave (διαφορετικά δεν μπορεί να κάνει resolve το host name)
+```bash
 sudo vi /etc/hosts 
-(192.168.0.1 	snf-33932, 192.168.0.2 	snf-33933)
-
+```
+```bash
+192.168.0.1 	snf-33932 
+192.168.0.2 	snf-33933
+```
 ## Δημιουργία SSH keys
 **Master and Slave:**<br>
 sudo apt-get install ssh
