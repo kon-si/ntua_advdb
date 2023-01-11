@@ -28,3 +28,6 @@ val lookupSchema = StructType(Array(
   StructField("Zone", StringType, true),
   StructField("service_zone", StringType, true))
 )
+
+val recordDF = spark.read.parquet("../records")
+val lookupDF = spark.read.parquet("../lookup")
