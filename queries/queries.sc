@@ -24,8 +24,8 @@ val recordSchema = StructType(Array(
 )
 
 val lookupSchema = StructType(Array(
-  StructField("project", StringType, true),
-  StructField("article", StringType, true),
-  StructField("requests", IntegerType, true),
-  StructField("bytes_served", DoubleType, true))
+  StructField("LocationID", IntegerType, true),
+  StructField("Borough", StringType, true),
+  StructField("Zone", StringType, true),
+  StructField("service_zone", StringType, true))
 )
