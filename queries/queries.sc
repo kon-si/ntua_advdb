@@ -1,10 +1,10 @@
 import org.apache.spark.sql.types._
 
 val recordSchema = StructType(Array(
-  StructField("VendorID", IntegerType, true),
+  StructField("VendorID", LongType, true),
   StructField("tpep_pickup_datetime", TimestampType, true),
   StructField("tpep_dropoff_datetime", TimestampType, true),
-  StructField("Passenger_count", IntegerType, true),
+  StructField("Passenger_count", DoubleType, true),
   StructField("Trip_distance", FloatType, true),
   StructField("PULocationID", StringType, true),
   StructField("DOLocationID", StringType, true),
@@ -29,5 +29,8 @@ val lookupSchema = StructType(Array(
   StructField("service_zone", StringType, true))
 )
 
-val recordDF = spark.read.parquet("../records").schema(recordSchema)
-val lookupDF = spark.read.csv("../lookup/taxi+_zone_lookup.csv").schema(lookupSchema)
+val recordDF = spark.read.schema(recordSchema).parquet("../records")
+val lookupDF = spark.read.schema(lookupSchema).csv("../lookup/taxi+_zone_lookup.csv")
+
+val recordRDD = spark.read.schema(recordSchema).parquet("../records").rdd
+val lookupRDD = spark.read.schema(lookupSchema).csv("../lookup/taxi+_zone_lookup.csv").rdd
