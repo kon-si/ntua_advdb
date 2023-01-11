@@ -29,5 +29,5 @@ val lookupSchema = StructType(Array(
   StructField("service_zone", StringType, true))
 )
 
-val recordDF = spark.read.parquet("../records").schema(recordSchema)
-val lookupDF = spark.read.csv("../lookup/taxi+_zone_lookup.csv").schema(lookupSchema)
+val recordDF = sqlContext.read.parquet("../records").schema(recordSchema)
+val lookupDF = sqlContext.read.csv("../lookup/taxi+_zone_lookup.csv").schema(lookupSchema)
