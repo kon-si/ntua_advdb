@@ -20,7 +20,6 @@ val recordSchema = StructType(Array(
   StructField("Total_amount", FloatType, true)),
   StructField("Congestion_Surcharge", FloatType, true)),
   StructField("Airport_fee", FloatType, true)),
-
 )
 
 val lookupSchema = StructType(Array(
