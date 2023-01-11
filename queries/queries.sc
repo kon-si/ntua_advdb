@@ -13,7 +13,7 @@ val recordSchema = StructType(Array(
   StructField("Payment_type", IntegerType, true),
   StructField("Fare_amount", FloatType, true),
   StructField("Extra", FloatType, true),
-  StructField("MTA_tax", FloatType, true)),
+  StructField("MTA_tax", FloatType, true),
   StructField("Improvement_surcharge", FloatType, true),
   StructField("Tip_amount", FloatType, true),
   StructField("Tolls_amount", FloatType, true),
