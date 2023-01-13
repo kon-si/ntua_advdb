@@ -32,8 +32,8 @@ val lookupSchema = StructType(Array(
 )
 
 
-val recordsRDD = sqlContext.read.schema(recordSchema).parquet("../records").rdd
-val lookupRDD = sqlContext.read.schema(lookupSchema).options(Map("header"->"true")).csv("../lookup/taxi+_zone_lookup.csv").rdd
+val recordsRDD = sqlContext.read.schema(recordSchema).parquet("../records").rdd //alternatively turn DF to RDD val recordsRDD = recordsDF.rdd
+val lookupRDD = sqlContext.read.schema(lookupSchema).options(Map("header"->"true")).csv("../lookup/taxi+_zone_lookup.csv").rdd //alternatively turn DF to RDD val lookupRDD = lookupDF.rdd
 
 
 val recordsDF = sqlContext.read.schema(recordSchema).parquet("../records")
