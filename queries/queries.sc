@@ -66,9 +66,7 @@ printf("|------------------------------------------|\n\n")
 printf("|------------------- Q2 -------------------|\n")
 /*
 spark.time(
-    recordsDF.withColumn("Month",month(col("tpep_pickup_datetime")))
-        .filter(col("Month")<7)
-        .groupBy("Month")
+    recordsDF.groupBy(month(col("tpep_pickup_datetime")).as("Month"))
         .agg(max("Tolls_amount").as("Max_Tolls_amount"))
         .orderBy("Month")
         .show()
