@@ -1,4 +1,4 @@
-# install hdfs
+# HDFS Installation
 [source link](https://sparkbyexamples.com/hadoop/apache-hadoop-installation/)
 
 **/etc/hosts**<br>
