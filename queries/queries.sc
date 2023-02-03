@@ -49,9 +49,9 @@ printf("|------------------- Q1 -------------------|\n")
 /*
  spark.time(
        recordsDF.filter(month(col("tpep_pickup_datetime"))===3)
-               .join(lookupDF, recordsDF("PULocationID").equalTo(lookupDF("LocationID")))
+               .join(lookupDF, recordsDF("DOLocationID").equalTo(lookupDF("LocationID")))
                .filter(col("Zone").equalTo("Battery Park"))
-               .withColumnRenamed("Zone","PUZone")
+               .withColumnRenamed("Zone","DOZone")
                .drop("LocationID","Borough","service_zone")
                .orderBy(desc("Tip_amount"))
                .limit(1)
@@ -71,6 +71,7 @@ spark.time(
         .orderBy("Month")
         .show()
     )
+			
 */
 printf("|------------------------------------------|\n\n")
 
@@ -149,13 +150,13 @@ printf("|------------------------------------------|\n\n")
 printf("|------------------- Q4 -------------------|\n")
 /*
 spark.time(
-    recordsDF.withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime")))
-      .withColumn("hour", hour(col("tpep_pickup_datetime")))
-      .groupBy("day_of_week", "hour")
-      .agg(count("*").as("transactions"))
-      .withColumn("dense_rank", dense_rank().over(Window.partitionBy("day_of_week").orderBy(col("transactions").desc)))
-      .filter(col("dense_rank") < 4)
-      .show(50))
+      recordsDF.withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime")))
+            .withColumn("hour", hour(col("tpep_pickup_datetime")))
+            .groupBy("day_of_week", "hour")
+            .agg(max(col("Passenger_count")).as("Max_Passenger_Count"))
+            .withColumn("rank", row_number().over(Window.partitionBy("day_of_week").orderBy(col("Max_Passenger_Count").desc)))
+            .filter(col("rank") < 4)
+            .show(50))
 */
 printf("|------------------------------------------|\n\n")
 
