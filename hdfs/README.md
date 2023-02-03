@@ -1,8 +1,8 @@
-# install hdfs
+# HDFS Installation
 [source link](https://sparkbyexamples.com/hadoop/apache-hadoop-installation/)
 
 **/etc/hosts**<br>
-Προσθέτουμε στο /etc/hosts τις IPv4 που έχουν στο localnet ο master και ο slave (διαφορετικά δεν μπορεί να κάνει resolve το host name)
+Προσθέτουμε στο /etc/hosts τις IPv4 που έχουν στο localnet ο master και ο slave (διαφορετικά δεν μπορεί να αναγνωριστεί το host name):
 ```bash
 sudo vi /etc/hosts 
 ```
@@ -10,6 +10,9 @@ sudo vi /etc/hosts
 192.168.0.1 	snf-33932 
 192.168.0.2 	snf-33933
 ```
+
+Σημείωση: Εάν υπάρχει, πρέπει να διαγραφεί η εγγραφή για την loopback διεύθυνση 127.0.1.1 από το αρχείο /etc/hosts, διαφορερικά μπλοκάρεται η επικοινωνία μεταξύ των datanodes και του namenode.
+
 ## Δημιουργία SSH keys
 **Master and Slave:**<br>
 ```bash
