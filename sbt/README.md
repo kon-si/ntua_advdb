@@ -2,6 +2,11 @@
 
 [source link](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html)
 
+
+Το SBT2 είναι open-source εργαλείο δημιουργίας εφαρμογών για Scala και Java. Το
+χρησιμοποιούμε ώστε να μετατρέψουμε τον κώδικα Scala σε εκτελέσιμα αρχεία JAR. Για να το
+εγκαταστήσουμε τρέχουμε τις εξής εντολές:
+
 ```bash
 echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" \
 | sudo tee /etc/apt/sources.list.d/sbt.list
