@@ -153,8 +153,8 @@ spark.time(
       recordsDF.withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime")))
             .withColumn("hour", hour(col("tpep_pickup_datetime")))
             .groupBy("day_of_week", "hour")
-            .agg(max(col("Passenger_count")).as("Max_Passenger_Count"))
-            .withColumn("rank", row_number().over(Window.partitionBy("day_of_week").orderBy(col("Max_Passenger_Count").desc)))
+            .agg(avg(col("Passenger_count")).as("Avg_Passenger_Count"))
+            .withColumn("rank", row_number().over(Window.partitionBy("day_of_week").orderBy(col("Avg_Passenger_Count").desc)))
             .filter(col("rank") < 4)
             .show(50))
 */
