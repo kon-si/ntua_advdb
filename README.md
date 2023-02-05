@@ -8,9 +8,9 @@
 * [Dataset](#dataset)
 
 ## Team Information
-Team Code on Helios: 92
-Team Members: 
-Christina Diamanti
+**Team Code on Helios:** <br> 92 <br><br>
+**Team Members:** <br> 
+Christina Diamanti <br>
 Konstantinos Sideris
 
 ## Specifications of VMs used:
