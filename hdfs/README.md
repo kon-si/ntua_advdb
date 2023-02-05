@@ -1,19 +1,22 @@
 # HDFS Installation
 [source link](https://sparkbyexamples.com/hadoop/apache-hadoop-installation/)
 
-**/etc/hosts**<br>
-Προσθέτουμε στο /etc/hosts τις IPv4 που έχουν στο localnet ο master και ο slave (διαφορετικά δεν μπορεί να αναγνωριστεί το host name):
+**Add hostnames to /etc/hosts**<br>
+In /etc/hosts file add the VM hostnames with their corresponding local network IPv4 addresses to ensure that name resolution is fast and consistent.
+
 ```bash
 sudo vi /etc/hosts 
 ```
 ```bash
-192.168.0.1 	snf-33932 
+192.168.0.1 	snf-34594 
 192.168.0.2 	snf-33933
 ```
 
-Σημείωση: Εάν υπάρχει, πρέπει να διαγραφεί η εγγραφή για την loopback διεύθυνση 127.0.1.1 από το αρχείο /etc/hosts, διαφορερικά μπλοκάρεται η επικοινωνία μεταξύ των datanodes και του namenode.
+Note: If present, the entry for the loopback address 127.0.1.1 must be deleted from the /etc/hosts file, otherwise communication between the datanodes and the namenode is blocked.
 
-## Δημιουργία SSH keys
+## SSH key creation
+In Apache Hadoop HDFS, Secure Shell (SSH) keys are used for passwordless authentication between the nodes in a cluster. SSH keys provide a secure and automated way to establish trust between nodes, which is important when setting up and configuring a HDFS cluster.
+
 **Master and Slave:**<br>
 ```bash
 sudo apt-get install ssh
@@ -29,7 +32,7 @@ chmod 600 ~/.ssh/authorized_keys
 ```bash
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 cat .ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-scp .ssh/authorized_keys snf-33932:/home/user/.ssh/authorized_keys
+scp .ssh/authorized_keys snf-34594:/home/user/.ssh/authorized_keys
 ```
 ## Εγκατάσταση JAVA
 **Master and Slave:**<br>
