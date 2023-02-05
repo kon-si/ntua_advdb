@@ -1,4 +1,12 @@
-# HDFS Installation
+# Set Up 
+
+## Table of contents
+* [HDFS Installation](#hdfs-installation)
+* [Yarn Configuration](#yarn-configuration)
+* [Spark Installation](#spark-installation)
+* [SBT Installation](#sbt-installation)
+
+## HDFS Installation
 [source link](https://sparkbyexamples.com/hadoop/apache-hadoop-installation/)
 
 **Add hostnames to /etc/hosts**<br>
@@ -14,7 +22,7 @@ sudo vi /etc/hosts
 
 Note: If present, the entry for the loopback address 127.0.1.1 must be deleted from the /etc/hosts file, otherwise communication between the datanodes and the namenode is blocked.
 
-## SSH key creation
+### SSH key creation
 In Apache Hadoop HDFS, Secure Shell (SSH) keys are used for passwordless authentication between the nodes in a cluster. SSH keys provide a secure and automated way to establish trust between nodes, which is important when setting up and configuring a HDFS cluster.
 
 **Master and Slave:**<br>
@@ -34,19 +42,19 @@ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 cat .ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 scp .ssh/authorized_keys snf-34594:/home/user/.ssh/authorized_keys
 ```
-## Εγκατάσταση JAVA
+### Εγκατάσταση JAVA
 **Master and Slave:**<br>
 ```bash
 sudo apt-get -y install openjdk-8-jdk-headless
 ```
-## Εγκατάσταση Hadoop
+### Εγκατάσταση Hadoop
 **Master and Slave:**<br>
 ```bash
 wget http://apache.cs.utah.edu/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz
 tar -xzf hadoop-3.3.4.tar.gz 
 mv hadoop-3.3.4 hadoop
 ```
-### Hadoop Environmental Variables
+#### Hadoop Environmental Variables
 **Master and Slave:**<br>
 ```bash
 vi ~/.bashrc 
@@ -65,7 +73,7 @@ export YARN_HOME=${HADOOP_HOME}
 ```bash
 source ~/.bashrc 
 ```
-### Hadoop Configuration
+#### Hadoop Configuration
 * **hadoop-env.sh**<br>
 ```bash
 vi ~/hadoop/etc/hadoop/hadoop-env.sh
@@ -141,13 +149,13 @@ vi ~/hadoop/etc/hadoop/mapred-site.xml
     </property>
 </configuration>
 ```
-### Create Data Folder
+#### Create Data Folder
 ```bash
 sudo mkdir -p /usr/local/hadoop/hdfs/data
 sudo chown user:user -R /usr/local/hadoop/hdfs/data
 chmod 700 /usr/local/hadoop/hdfs/data
 ```
-### Αρχεία Master και Workers
+#### Αρχεία Master και Workers
 **Master and Slave:**<br>
 ```bash
 vi ~/hadoop/etc/hadoop/masters
@@ -162,20 +170,20 @@ vi ~/hadoop/etc/hadoop/workers
 192.168.0.1
 192.168.0.2
 ```
-## Format και εκκίνηση HDFS
+### Format και εκκίνηση HDFS
 **Master**<br>
 ```bash
 hdfs namenode -format
 start-dfs.sh
 ```
-# Yarn Configuration 
+## Yarn Configuration 
 
 [source link 1](https://sparkbyexamples.com/hadoop/yarn-setup-and-run-map-reduce-program/) <br>
 [source link 2](https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.0.9.0/bk_installing_manually_book/content/rpm-chap1-11.html)
 
 Yarn is installed on the system by default with the Apache Hadoop installation, so no additional installation is necessary, but some parameters related to the use of yarn and some settings related to memory management need to be configured. The configurations should be set both for Master and Slave machines.
 
-## Configure yarn-site.xml
+### Configure yarn-site.xml
 ```bash
 vi ~/hadoop/etc/hadoop/yarn-site.xml
 ```
@@ -212,7 +220,7 @@ vi ~/hadoop/etc/hadoop/yarn-site.xml
 </configuration>
 ```
 
-## Configure mapred-site.xml
+### Configure mapred-site.xml
 ```bash
 vi ~/hadoop/etc/hadoop/mapred-site.xml
 ```
@@ -252,3 +260,73 @@ vi ~/hadoop/etc/hadoop/mapred-site.xml
     </property>
 </configuration>
 ```
+
+## Spark Installation
+[source link](https://sparkbyexamples.com/spark/spark-setup-on-hadoop-yarn/)
+
+Η εγκατάσταση του Spark θα γίνει πάνω στο Hadoop Cluster γι' αυτό και τα παρακάτω βήματα θα πρέπει να γίνουν αφότου έχει εγκατασταθεί με επιτυχία το Apache Hadoop και έχουν γίνει οι απαραίτητες ρυθμίσεις για το Yarn.
+
+```bash
+wget https://archive.apache.org/dist/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.2.tgz
+tar -xzf spark-3.3.2-bin-hadoop3.2.tgz
+mv spark-3.3.2-bin-hadoop3.2 spark
+```
+
+### Ρύθμιση Μεταβλητών Περιβάλλοντος
+```bash
+vi ~/.bashrc 
+```
+```bash
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export SPARK_HOME=/home/ubuntu/spark
+export PATH=$PATH:$SPARK_HOME/bin
+export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
+```
+
+επαναφόρτωση των μεταβλητών στο bash session:
+```bash
+source ~/.bashrc 
+```
+
+### spark-defaults.conf 
+```bash
+vi ~/spark/conf/spark-defaults.conf 
+```
+Set spark.master to Yarn and configure History Server:
+```bash
+spark.master yarn
+spark.driver.memory 512m
+spark.yarn.am.memory 512m
+spark.executor.memory 512m
+
+spark.eventLog.enabled true
+spark.eventLog.dir hdfs://192.168.0.1:9000/user/user/spark-logs
+spark.history.fs.logDirectory hdfs://192.168.0.1:9000/user/user/spark-logs
+```
+
+Start History Server:
+```bash
+~/spark/sbin/start-history-server.sh
+```
+
+## SBT Installation
+
+[source link](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html)
+
+
+Το SBT είναι open-source εργαλείο δημιουργίας εφαρμογών για Scala και Java. Το
+χρησιμοποιούμε ώστε να μετατρέψουμε τον κώδικα Scala σε εκτελέσιμα αρχεία JAR. Για να το
+εγκαταστήσουμε τρέχουμε τις εξής εντολές:
+
+```bash
+echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" \
+| sudo tee /etc/apt/sources.list.d/sbt.list
+echo "deb https://repo.scala-sbt.org/scalasbt/debian /" \
+| sudo tee /etc/apt/sources.list.d/sbt_old.list
+curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&\
+search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" \
+| sudo -H gpg --no-default-keyring --keyring \
+gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import
+sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg
+sudo apt-get update
+sudo apt-get install sbt
