@@ -37,6 +37,9 @@ chmod 700 ~/.ssh
 touch ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
+Generate an SSH Key: Generate a public/private key pair on the master node using the ssh-keygen command.
+Copy the Public Key to the Slave: Copy the public key to the slave node, so that the master node can securely log into the slave node without a password. 
+
 **Master**<br>
 ```bash
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
