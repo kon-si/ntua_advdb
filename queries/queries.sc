@@ -61,7 +61,7 @@ printf("|------------------- Q1 -------------------|\n")
 val filt = lookupDF.filter(col("Zone").equalTo("Battery Park")).drop("Borough","service_zone")
 spark.time(
          recordsDF.filter(month(col("tpep_pickup_datetime"))===3)
-                  .join(filt, recordsDF("DOLocationID").equalTo(filt("LocationID")))
+                  .join(broadcast(filt), recordsDF("DOLocationID").equalTo(filt("LocationID")))
                   .withColumnRenamed("Zone","DOZone")
                   .orderBy(desc("Tip_amount"))
                   .limit(1)
