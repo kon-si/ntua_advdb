@@ -1,9 +1,17 @@
 # Advanced Topics in Database Systems
 
 ## Table of contents
+* [Team Information](#team-information)
 * [Specifications of VMs used](#specifications-of-vms-used)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [Dataset](#dataset)
+
+## Team Information
+Team Code on Helios: 92
+Team Members: 
+Christina Diamanti
+Konstantinos Sideris
 
 ## Specifications of VMs used:
 For this project we used two Virtual Machines, one had the role of the Master and the other of the Slave. Each VM was assigned with an IPv6 address, and the Master was also assigned a public IPv4 address. The two VMs communicate over an IPv4 local network. 
