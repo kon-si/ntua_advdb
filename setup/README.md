@@ -42,24 +42,24 @@ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 cat .ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 scp .ssh/authorized_keys snf-34594:/home/user/.ssh/authorized_keys
 ```
-### Εγκατάσταση JAVA
+### JAVA Installation
 **Master and Slave:**<br>
 ```bash
 sudo apt-get -y install openjdk-8-jdk-headless
 ```
-### Εγκατάσταση Hadoop
+### Hadoop Installation
 **Master and Slave:**<br>
 ```bash
 wget http://apache.cs.utah.edu/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz
 tar -xzf hadoop-3.3.4.tar.gz 
 mv hadoop-3.3.4 hadoop
 ```
-#### Hadoop Environmental Variables
+#### Hadoop Environment Variables
 **Master and Slave:**<br>
 ```bash
 vi ~/.bashrc 
 ```
-(τα προσθέτουμε στο τέλος του αρχείου)<br>
+Add the following at the bottom of the file:<br>
 ```bash
 export HADOOP_HOME=/home/user/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin
@@ -69,7 +69,7 @@ export HADOOP_COMMON_HOME=${HADOOP_HOME}
 export HADOOP_HDFS_HOME=${HADOOP_HOME}
 export YARN_HOME=${HADOOP_HOME}
 ```
-επαναφόρτωση των μεταβλητών στο bash session:
+Reload the environment variables in bash:
 ```bash
 source ~/.bashrc 
 ```
@@ -155,7 +155,7 @@ sudo mkdir -p /usr/local/hadoop/hdfs/data
 sudo chown user:user -R /usr/local/hadoop/hdfs/data
 chmod 700 /usr/local/hadoop/hdfs/data
 ```
-#### Αρχεία Master και Workers
+#### Master και Workers Files
 **Master and Slave:**<br>
 ```bash
 vi ~/hadoop/etc/hadoop/masters
@@ -170,12 +170,15 @@ vi ~/hadoop/etc/hadoop/workers
 192.168.0.1
 192.168.0.2
 ```
-### Format και εκκίνηση HDFS
+### Format και start HDFS
 **Master**<br>
 ```bash
 hdfs namenode -format
 start-dfs.sh
 ```
+
+Note: In case there is a need to reformat HDFS, first execute the command "stop-dfs.sh", then delete the folders "usr/local/hadoop/hdfs/data/nameNode" and "usr/local/hadoop/hdfs/data/dataNode".
+
 ## Yarn Configuration 
 
 [source link 1](https://sparkbyexamples.com/hadoop/yarn-setup-and-run-map-reduce-program/) <br>
@@ -264,7 +267,7 @@ vi ~/hadoop/etc/hadoop/mapred-site.xml
 ## Spark Installation
 [source link](https://sparkbyexamples.com/spark/spark-setup-on-hadoop-yarn/)
 
-Η εγκατάσταση του Spark θα γίνει πάνω στο Hadoop Cluster γι' αυτό και τα παρακάτω βήματα θα πρέπει να γίνουν αφότου έχει εγκατασταθεί με επιτυχία το Apache Hadoop και έχουν γίνει οι απαραίτητες ρυθμίσεις για το Yarn.
+Spark will be installed on Hadoop Cluster so the following steps should be done after Apache Hadoop has been successfully installed and the necessary Yarn settings have been made.
 
 ```bash
 wget https://archive.apache.org/dist/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.2.tgz
@@ -272,7 +275,7 @@ tar -xzf spark-3.3.2-bin-hadoop3.2.tgz
 mv spark-3.3.2-bin-hadoop3.2 spark
 ```
 
-### Ρύθμιση Μεταβλητών Περιβάλλοντος
+### Environment Variables
 ```bash
 vi ~/.bashrc 
 ```
@@ -283,7 +286,6 @@ export PATH=$PATH:$SPARK_HOME/bin
 export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 ```
 
-επαναφόρτωση των μεταβλητών στο bash session:
 ```bash
 source ~/.bashrc 
 ```
@@ -313,10 +315,8 @@ Start History Server:
 
 [source link](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html)
 
-
-Το SBT είναι open-source εργαλείο δημιουργίας εφαρμογών για Scala και Java. Το
-χρησιμοποιούμε ώστε να μετατρέψουμε τον κώδικα Scala σε εκτελέσιμα αρχεία JAR. Για να το
-εγκαταστήσουμε τρέχουμε τις εξής εντολές:
+SBT is an open-source application builder for Scala and Java. We use it to turn Scala code into executable JAR files. For the
+install we run the following commands:
 
 ```bash
 echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" \
