@@ -57,6 +57,11 @@ sudo apt-get -y install openjdk-8-jdk-headless
 wget http://apache.cs.utah.edu/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz
 tar -xzf hadoop-3.3.4.tar.gz 
 mv hadoop-3.3.4 hadoop
+
+sudo usermod -aG user user
+sudo chown user:root -R /usr/local/hadoop/
+sudo chmod g+rwx -R /usr/local/hadoop/
+sudo adduser user sudo
 ```
 #### Hadoop Environment Variables
 **Master and Slave:**<br>
