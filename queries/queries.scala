@@ -23,15 +23,13 @@ object dataCleaning {
   }
 }
 
-
 object query1 {
   def main(args: Array[String]) {
     val spark = SparkSession.builder.appName("query1").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query1.txt"))
-    val writer = new PrintWriter(output)
-    
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query1.txt"))
+
     val sqlContext = spark.sqlContext
     val lookupSchema = StructType(Array(
       StructField("LocationID", IntegerType, true),
@@ -41,26 +39,25 @@ object query1 {
     )
 
     val lookupDF = sqlContext.read.schema(lookupSchema).options(Map("header"->"true")).csv("hdfs://192.168.0.1:9000/user/user/lookup/taxi+_zone_lookup.csv")
+      .filter(col("Zone").equalTo("Battery Park")).drop("Borough","service_zone")
     val recordsDF = spark.read.parquet("clean_records/records.parquet")
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsDF
-        .filter(month(col("tpep_pickup_datetime")) === 3)
-        .join(lookupDF, recordsDF("DOLocationID").equalTo(lookupDF("LocationID")))
-        .filter(col("Zone").equalTo("Battery Park"))
-        .withColumnRenamed("Zone", "DOZone")
-        .drop("LocationID", "Borough", "service_zone")
-        .orderBy(desc("Tip_amount"))
-        .limit(1)
-        .unpersist()
-        .show()
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
+    val time = System.nanoTime
+    val result = recordsDF
+      .filter(month(col("tpep_pickup_datetime")) === 3)
+      .join(broadcast(lookupDF), recordsDF("DOLocationID").equalTo(lookupDF("LocationID")))
+      .filter(col("Zone").equalTo("Battery Park"))
+      .withColumnRenamed("Zone", "DOZone")
+      .orderBy(desc("Tip_amount"))
+      .limit(1)
+      .unpersist()
+      .show()
+    val duration = (System.nanoTime - time) / 1e9d
 
+    val writer = new PrintWriter(output)
+    writer.println(duration.toString)
     writer.close()
+
     spark.stop()
   }
 }
@@ -70,25 +67,23 @@ object query2 {
     val spark = SparkSession.builder.appName("query2").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query2.txt"))
-    val writer = new PrintWriter(output)
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query2.txt"))
 
     val recordsDF = spark.read.parquet("clean_records/records.parquet")
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsDF
-        .groupBy(month(col("tpep_pickup_datetime")).as("Month"))
-        .agg(max("Tolls_amount").as("Max_Tolls_amount"))
-        .orderBy("Month")
-        .unpersist()
-        .show()
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
-
+    val time = System.nanoTime
+    val result = recordsDF
+      .groupBy(month(col("tpep_pickup_datetime")).as("Month"))
+      .agg(max("Tolls_amount").as("Max_Tolls_amount"))
+      .orderBy("Month")
+      .unpersist()
+      .show()
+    val duration = (System.nanoTime - time) / 1e9d
+    
+    val writer = new PrintWriter(output)
+    writer.println(duration)
     writer.close()
+
     spark.stop()
   }
 }
@@ -98,8 +93,7 @@ object query3_rdd {
     val spark = SparkSession.builder.appName("query3_rdd").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query3_rdd.txt"))
-    val writer = new PrintWriter(output)
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query3_rdd.txt"))
     var dateFormat = new SimpleDateFormat("D");
 
     def tperiod(x:Int) : String = {
@@ -133,28 +127,27 @@ object query3_rdd {
 
     val recordsRDD = spark.read.parquet("clean_records/records.parquet").rdd
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsRDD
-        .filter(t => t.getAs[Long]("PULocationID") != t.getAs[Long]("DOLocationID"))
-        .map(t => (tperiod(dateFormat.format(t.getTimestamp(1)).toInt), (t.getAs[Double]("trip_distance"), t.getAs[Double]("total_amount"))))
-        .aggregateByKey(((0.0, 0.0), (0.0, 0.0))) (
-          (acc: ((Double, Double), (Double, Double)), v: (Double, Double)) => 
-            ((acc._1._1 + v._1, acc._1._2 + 1.0), (acc._2._1 + v._2, acc._2._2 + 1.0)),
-          (acc1: ((Double, Double), (Double, Double)), acc2: ((Double, Double), (Double, Double))) => 
-            ((acc1._1._1 + acc2._1._1, acc1._1._2 + acc2._1._2), (acc1._2._1 + acc2._2._1, acc1._2._2 + acc2._2._2))
-        )
-        .map{ case (key, ((sum1, count1), (sum2, count2))) => (key, sum1/count1, sum2/count2) }
-        .sortBy(t => t._1)
-        .unpersist()
-        .collect()
-        .foreach(println)
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
+    val time = System.nanoTime
+    val result = recordsRDD
+      .filter(t => t.getAs[Long]("PULocationID") != t.getAs[Long]("DOLocationID"))
+      .map(t => (tperiod(dateFormat.format(t.getTimestamp(1)).toInt), (t.getAs[Double]("trip_distance"), t.getAs[Double]("total_amount"))))
+      .aggregateByKey(((0.0, 0.0), (0.0, 0.0))) (
+        (acc: ((Double, Double), (Double, Double)), v: (Double, Double)) => 
+          ((acc._1._1 + v._1, acc._1._2 + 1.0), (acc._2._1 + v._2, acc._2._2 + 1.0)),
+        (acc1: ((Double, Double), (Double, Double)), acc2: ((Double, Double), (Double, Double))) => 
+          ((acc1._1._1 + acc2._1._1, acc1._1._2 + acc2._1._2), (acc1._2._1 + acc2._2._1, acc1._2._2 + acc2._2._2))
+      )
+      .map{ case (key, ((sum1, count1), (sum2, count2))) => (key, sum1/count1, sum2/count2) }
+      .sortBy(t => t._1)
+      .unpersist()
+      .collect()
+      .foreach(println)
+    val duration = (System.nanoTime - time) / 1e9d
 
+    val writer = new PrintWriter(output)
+    writer.println(duration)
     writer.close()
+
     spark.stop()
   }
 }
@@ -164,26 +157,24 @@ object query3_df {
     val spark = SparkSession.builder.appName("query3_df").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query3_df.txt"))
-    val writer = new PrintWriter(output)
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query3_df.txt"))
 
     val recordsDF = spark.read.parquet("clean_records/records.parquet")
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsDF
-        .filter(col("PULocationID") =!= col("DOLocationID"))
-        .groupBy(window(col("tpep_pickup_datetime"), "15 days", "15 days", "70 hours").as("time_period"))
-        .avg("trip_distance", "total_amount")
-        .orderBy("time_period")
-        .unpersist()
-        .show()
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
+    val time = System.nanoTime
+    val result = recordsDF
+      .filter(col("PULocationID") =!= col("DOLocationID"))
+      .groupBy(window(col("tpep_pickup_datetime"), "15 days", "15 days", "70 hours").as("time_period"))
+      .avg("trip_distance", "total_amount")
+      .orderBy("time_period")
+      .unpersist()
+      .show()
+    val duration = (System.nanoTime - time) / 1e9d
 
+    val writer = new PrintWriter(output)
+    writer.println(duration)
     writer.close()
+
     spark.stop()
   }
 }
@@ -193,28 +184,26 @@ object query4 {
     val spark = SparkSession.builder.appName("query4").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query4.txt"))
-    val writer = new PrintWriter(output)
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query4.txt"))
 
     val recordsDF = spark.read.parquet("clean_records/records.parquet")
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsDF
-        .withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime")))
-        .withColumn("hour", hour(col("tpep_pickup_datetime")))
-        .groupBy("day_of_week", "hour")
-        .agg(max(col("Passenger_count")).as("Max_Passenger_Count"))
-        .withColumn("rank", row_number().over(Window.partitionBy("day_of_week").orderBy(col("Max_Passenger_Count").desc)))
-        .filter(col("rank") < 4)
-        .unpersist()
-        .show(21)
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
+    val time = System.nanoTime
+    val result = recordsDF
+      .withColumn("day_of_week", dayofweek(col("tpep_pickup_datetime")))
+      .withColumn("hour", hour(col("tpep_pickup_datetime")))
+      .groupBy("day_of_week", "hour")
+      .agg(avg(col("Passenger_count")).as("Avg_Passenger_Count"))
+      .withColumn("rank", row_number().over(Window.partitionBy("day_of_week").orderBy(col("Avg_Passenger_Count").desc)))
+      .filter(col("rank") < 4)
+      .unpersist()
+      .show(21)
+    val duration = (System.nanoTime - time) / 1e9d
 
+    val writer = new PrintWriter(output)
+    writer.println(duration)
     writer.close()
+
     spark.stop()
   }
 }
@@ -224,36 +213,34 @@ object query5 {
     val spark = SparkSession.builder.appName("query5").getOrCreate()
     val conf = new Configuration()
     val fs = FileSystem.get(conf)
-    val output = fs.create(new Path("hdfs://192.168.0.1:9000/user/user/queries/query5.txt"))
-    val writer = new PrintWriter(output)
+    val output = fs.append(new Path("hdfs://192.168.0.1:9000/user/user/queries/query5.txt"))
 
     val recordsDF = spark.read.parquet("clean_records/records.parquet")
 
-    var i = 0;
-    for( i <- 1 to 20) {
-      val time = System.nanoTime
-      val result = recordsDF
-        .withColumn("tip_percentage", col("tip_amount") / col("total_amount") * 100)
-        .withColumn("date", to_date(col("tpep_dropoff_datetime")))
-        .groupBy("date")
-        .avg("tip_percentage")
-        .withColumn("row", 
-          row_number()
-          .over(Window
-            .partitionBy(month(col("date")))
-            .orderBy(desc("avg(tip_percentage)"))
-          )
+    val time = System.nanoTime
+    val result = recordsDF
+      .withColumn("tip_percentage", col("tip_amount") / col("total_amount") * 100)
+      .withColumn("date", to_date(col("tpep_dropoff_datetime")))
+      .groupBy("date")
+      .avg("tip_percentage")
+      .withColumn("row", 
+        row_number()
+        .over(Window
+          .partitionBy(month(col("date")))
+          .orderBy(desc("avg(tip_percentage)"))
         )
-        .filter(col("row") <= 5)
-        .select("date", "avg(tip_percentage)")
-        .orderBy("date") 
-        .unpersist()
-        .show(30)
-      val duration = (System.nanoTime - time) / 1e9d
-      writer.println(duration)
-    }
+      )
+      .filter(col("row") <= 5)
+      .select("date", "avg(tip_percentage)")
+      .orderBy("date") 
+      .unpersist()
+      .show(30)
+    val duration = (System.nanoTime - time) / 1e9d
 
+    val writer = new PrintWriter(output)
+    writer.println(duration)
     writer.close()
+
     spark.stop()
   }
 }
