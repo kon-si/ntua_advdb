@@ -27,6 +27,7 @@ For this project we used two Virtual Machines, one had the role of the Master an
 
 ## Technologies 
 Project is created with:
+* OpenJDK 1.8.0_352
 * Apache Hadoop 3.3.4
 * Apache Spark 3.3.1
 * Scala 2.13.10
