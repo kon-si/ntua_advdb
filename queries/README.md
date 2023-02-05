@@ -10,6 +10,9 @@ $ find .
 ./src/main/scala
 ./src/main/scala/queries.scala
 ```
-Once that is in place, we can create a JAR package containing the application’s code using the command  ```bash $ sbt package ```
+Once that is in place, we can create a JAR package containing the application’s code using the command:
+```bash 
+$ sbt package 
+```
 
-then use the spark-submit script to run our program.
+To run our program we use the file [run_queries.sh](https://github.com/kon-si/ntua_atds/blob/master/queries/run_queries.sh). This bash script executes a loop with 20 iteration of all the queries from the JAR executable we created earlier using the spark-submit script.
