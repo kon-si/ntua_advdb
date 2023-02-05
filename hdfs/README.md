@@ -9,7 +9,7 @@ sudo vi /etc/hosts
 ```
 ```bash
 192.168.0.1 	snf-34594 
-192.168.0.2 	snf-33933
+192.168.0.2 	snf-34596
 ```
 
 Note: If present, the entry for the loopback address 127.0.1.1 must be deleted from the /etc/hosts file, otherwise communication between the datanodes and the namenode is blocked.
