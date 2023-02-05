@@ -36,6 +36,8 @@ Project is created with:
 ## Setup 
 To install and configure the aforementioned go to the [README in the setup folder](https://github.com/kon-si/ntua_dbpros/blob/master/setup/README.md) where all the necessary steps are described in detail.
 
+The kubernetes folder contains instructions for setting up Kubernetes IPv6 Cluster using kubeadm. However, we did not use the cluster so it is not a necessary part of the set up. 
+
 ## Dataset
 The Dataset used for this project is the [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page). 
 More specifically we used data from the Yellow Taxi Trip Records for the months of January to June of 2022. All taxi trip records were in parquet format. We also used the taxi zone lookup csv file found in this [link](https://d37ci6vzurychx.cloudfront.net/misc/taxi+_zone_lookup.csv), which we needed to be able to connect LocationID information with the name of the zone of the Location.
