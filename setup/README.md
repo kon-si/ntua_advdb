@@ -4,6 +4,7 @@
 * [HDFS Installation](#hdfs-installation)
 * [Yarn Configuration](#yarn-configuration)
 * [Spark Installation](#spark-installation)
+* [Scala Installation](#scala-installation)
 * [SBT Installation](#sbt-installation)
 
 ## HDFS Installation
@@ -309,6 +310,18 @@ spark.history.fs.logDirectory hdfs://192.168.0.1:9000/user/user/spark-logs
 Start History Server:
 ```bash
 ~/spark/sbin/start-history-server.sh
+```
+## Scala Installation
+Spark version 3.3.1 requires Scala version 2.12/2.13. We install the latest version of Scala, which at the time of writing is version 2.13.10:
+```bash
+wget www.scala-lang.org/files/archive/scala-2.13.10.deb sudo dpkg -i scala-2.13.10.deb 
+sudo apt-get update 
+sudo apt-get install scala 
+```
+To check if the installation was successful run command: "scala -version".
+The result should be:
+```bash
+Scala code runner version 2.13.10 -- Copyright 2002-2022
 ```
 
 ## SBT Installation
