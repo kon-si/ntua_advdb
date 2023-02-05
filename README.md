@@ -34,6 +34,7 @@ Project is created with:
 * SBT 1.8.2
 
 ## Setup 
+To install and configure the aforementioned go to the [README in the setup folder](https://github.com/kon-si/ntua_dbpros/blob/master/setup/README.md) where all the necessary steps are described in detail.
 
 ## Dataset
 The Dataset used for this project is the [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page). 
