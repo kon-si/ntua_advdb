@@ -1,10 +1,11 @@
-# ntua_dbpros
+# Advanced Topics in Database Systems
 
-## Προαπαιτούμενες Υποδομές:
-Χρησιμοποιούμε δύο Virtual Machines, τον Master και τον Slave. Κάθε VM διαθέτει 4 CPU
-cores, 8GB μνήμη RAM, κύρια μνήμη 30GB και διευθύνσεις public IPv6. Επιπρόσθετα, ο Master
-διαθέτει public IPv4. Επικοινωνούν μέσω τοπικού δικτύου IPv4. Τρέχουν λειτουργικό σύστημα
-Ubuntu 18.04.6 LTS.
+## Specifications of VMs used:
+For this project we used two Virtual Machines, one had the role of the Master and the other of the Slave. Each VM was assigned with an IPv6 address, and the Master was also assigned a public IPv4 address. The two VMs communicate over an IPv4 local network. 
+
+| OS  |  CPUs | RAM | Disk space | 
+| ------------- |  ------------- | ------------- | ------------- |
+| Ubuntu 18.04.6 LTS  | 4 |  8GB | 30GB | 
 
 | VM  |  Local Net IPv4 |
 | ------------- |  ------------- |
